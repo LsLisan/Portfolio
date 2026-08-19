@@ -8,8 +8,8 @@ import {
 const profiles = {
   flutter: {
     label: 'Mobile engineering',
-    title: 'Flutter developer building products people enjoy using.',
-    intro: 'I turn thoughtful product ideas into fast, polished cross-platform apps with Flutter, Firebase, and a strong eye for detail.',
+    title: 'Flutter developer and AI/ML engineer building useful products.',
+    intro: 'I combine polished cross-platform apps with applied AI, data science, and research to turn thoughtful ideas into useful products.',
         skills: ['Dart', 'Flutter', 'Riverpod', 'GetX', 'BLoC', 'Firebase', 'REST APIs', 'Google Maps', 'WebSocket'],
     projects: [
           { name: 'Aira', type: 'Hospitality & reservations · Client project', tech: 'Flutter · Maps · WebSocket', description: 'Guest and host workflows for hotel, vehicle, and place reservations with maps and real-time updates.', icon: '⌂' },
@@ -43,6 +43,7 @@ function App() {
   const [mode, setMode] = useState('flutter');
   const [dark, setDark] = useState(() => localStorage.getItem('theme') !== 'light');
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
   const dotCanvas = useRef(null);
   const active = profiles[mode];
 
@@ -52,11 +53,12 @@ function App() {
     const context = canvas.getContext('2d');
     let animationFrame;
     let pointer = { x: -1000, y: -1000 };
-    const dots = Array.from({ length: 90 }, (_, index) => ({
-      x: (index * 83) % 520,
-      y: (index * 47) % 520,
-      depth: 0.2 + ((index * 17) % 80) / 100,
-      phase: index * 0.7
+    const dots = Array.from({ length: 230 }, (_, index) => ({
+      x: ((index * 47) % 997) / 997,
+      y: ((index * 83) % 991) / 991,
+      depth: 0.18 + ((index * 29) % 82) / 100,
+      phase: index * 0.31,
+      size: 0.55 + ((index * 13) % 10) / 10
     }));
     const resize = () => {
       const ratio = window.devicePixelRatio || 1;
@@ -72,23 +74,32 @@ function App() {
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       context.clearRect(0, 0, width, height);
-      dots.forEach((dot) => {
-        const x = (dot.x / 520) * width + Math.sin(time / 1800 + dot.phase) * 7;
-        const y = (dot.y / 520) * height + Math.cos(time / 2100 + dot.phase) * 7;
-        const distance = Math.hypot(pointer.x - x, pointer.y - y);
-        const radius = distance < 120 ? 1.8 + (120 - distance) / 45 : 1.1 * dot.depth;
+      const renderedDots = dots.map((dot) => {
+        const driftX = Math.sin(time / 5000 + dot.phase) * 10 * dot.depth;
+        const driftY = Math.cos(time / 6200 + dot.phase) * 8 * dot.depth;
+        const parallaxX = (pointer.x / Math.max(width, 1) - 0.5) * dot.depth * 16;
+        const parallaxY = (pointer.y / Math.max(height, 1) - 0.5) * dot.depth * 12;
+        return { x: dot.x * width + driftX + parallaxX, y: dot.y * height + driftY + parallaxY, depth: dot.depth, size: dot.size, phase: dot.phase };
+      }).sort((first, second) => first.depth - second.depth);
+      renderedDots.forEach((dot) => {
+        const distance = Math.hypot(pointer.x - dot.x, pointer.y - dot.y);
+        const frontLight = dot.depth;
+        const radius = (0.45 + frontLight * 1.25) * dot.size + (distance < 95 ? (95 - distance) / 70 : 0);
         context.beginPath();
-        context.fillStyle = `rgba(224, 94, 63, ${0.15 + dot.depth * 0.35})`;
-        context.arc(x, y, radius, 0, Math.PI * 2);
+        context.fillStyle = `rgba(41, 151, 255, ${0.08 + dot.depth * 0.22})`;
+        context.shadowBlur = frontLight > 0.72 ? 6 : 0;
+        context.shadowColor = 'rgba(41, 151, 255, .45)';
+        context.arc(dot.x, dot.y, radius, 0, Math.PI * 2);
         context.fill();
       });
+      context.shadowBlur = 0;
       animationFrame = requestAnimationFrame(draw);
     };
     resize();
     window.addEventListener('resize', resize);
-    canvas.addEventListener('pointermove', move);
+    window.addEventListener('pointermove', move);
     animationFrame = requestAnimationFrame(draw);
-    return () => { cancelAnimationFrame(animationFrame); window.removeEventListener('resize', resize); canvas.removeEventListener('pointermove', move); };
+    return () => { cancelAnimationFrame(animationFrame); window.removeEventListener('resize', resize); window.removeEventListener('pointermove', move); };
   }, []);
 
   useEffect(() => {
@@ -103,6 +114,7 @@ function App() {
 
   return (
     <div className="site-shell">
+      <canvas ref={dotCanvas} className="dot-field" aria-hidden="true" />
       <header className="topbar">
         <button className="wordmark" onClick={() => switchSection('top')} aria-label="Back to top">LI<span>.</span></button>
         <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Primary navigation">
@@ -110,7 +122,10 @@ function App() {
         </nav>
         <div className="top-actions">
           <button className="icon-button" onClick={() => setDark(!dark)} aria-label="Toggle color theme">{dark ? <Sun size={18} /> : <Moon size={18} />}</button>
-          <a className="nav-resume" href="Lisan_Flutter_SWE_New.pdf" download>Resume <Download size={15} /></a>
+          <div className="resume-menu">
+            <button className="nav-resume" onClick={() => setResumeOpen(!resumeOpen)} aria-expanded={resumeOpen}>Resume <Download size={15} /></button>
+            {resumeOpen && <div className="resume-options"><a href="Lisan_Flutter_SWE_New.pdf" download onClick={() => setResumeOpen(false)}><Laptop size={15} /><span>Flutter / SWE</span><Download size={14} /></a><a href="AI_ML_Engineer.pdf" download onClick={() => setResumeOpen(false)}><BrainCircuit size={15} /><span>AI / ML Engineer</span><Download size={14} /></a></div>}
+          </div>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu">{menuOpen ? <X /> : <Menu />}</button>
         </div>
       </header>
@@ -126,7 +141,6 @@ function App() {
             <div className="hero-meta"><span><MapPin size={15} /> Dhaka, Bangladesh</span><span><Mail size={15} /> mdlisan36@gmail.com</span></div>
           </div>
           <div className="hero-visual">
-                        <canvas ref={dotCanvas} className="dot-field" aria-hidden="true" />
             <div className="portrait-frame"><img src="lisanprofile.jpg" alt="MD. Lisan Islam" /><div className="portrait-note"><Sparkles size={15} /><span>Building with<br /><strong>purpose & curiosity</strong></span></div></div>
             <div className="orbit orbit-one" /><div className="orbit orbit-two" />
           </div>
@@ -136,8 +150,7 @@ function App() {
 
         <section id="about" className="section-wrap content-section"><div className="section-heading"><span>01 / About</span><h2>A builder with<br /><em>range.</em></h2></div><div className="about-content"><div><p className="lead">I am a Computer Science graduate who likes working where engineering meets human behavior. From mobile interfaces to machine learning experiments, I care about making technology clear, useful, and dependable.</p><p>My work is grounded in curiosity, ownership, and the belief that good software should feel considered from the first tap to the last detail.</p><blockquote>“Refine your vision with wisdom from others, but stay true to your unique way of thinking.”</blockquote></div><div className="principles"><div><span>01</span><strong>Think in systems</strong><p>Good experiences are shaped by the details behind them.</p></div><div><span>02</span><strong>Make it legible</strong><p>Complex problems deserve simple, honest interfaces.</p></div><div><span>03</span><strong>Keep learning</strong><p>Every project is a new excuse to get better.</p></div></div></div></section>
 
-        <section id="experience" className="section-wrap content-section split-section"><div className="section-heading"><span>02 / Experience</span><h2>Where I've<br /><em>contributed.</em></h2></div><div className="experience-item"><div className="experience-date">FEB 2024<br />AUG 2024</div><div><div className="experience-title"><h3>Junior Software Developer</h3><span>QueryBD / Gazipur</span></div><p>Built scalable software and analytics systems for business clients, including real-time dashboards and API-driven inventory solutions.</p><div className="chip-row"><span>Product systems</span><span>Data dashboards</span><span>API integration</span></div></div></div></section>
-  <section id="experience" className="section-wrap content-section split-section"><div className="section-heading"><span>02 / Experience</span><h2>Where I've<br /><em>contributed.</em></h2></div><div className="experience-list"><div className="experience-item"><div className="experience-date">MAR 2026<br />AUG 2026</div><div><div className="experience-title"><h3>Flutter Developer</h3><span>SM Technology / Betopia Groups · Dhaka</span></div><p>Developed production cross-platform applications using clean architecture, Riverpod, GetX, REST APIs, backend services, and real-time features for Android and iOS.</p><div className="chip-row"><span>Flutter</span><span>Clean architecture</span><span>Riverpod · GetX</span><span>Production apps</span></div></div></div><div className="experience-item"><div className="experience-date">FEB 2024<br />AUG 2024</div><div><div className="experience-title"><h3>Junior Software Developer</h3><span>QueryBD · Gazipur</span></div><p>Built scalable software and analytics systems for business clients, including real-time dashboards and API-driven inventory solutions.</p><div className="chip-row"><span>Product systems</span><span>Data dashboards</span><span>API integration</span></div></div></div></div></section>
+          <section id="experience" className="section-wrap content-section split-section"><div className="section-heading"><span>02 / Experience</span><h2>Where I've<br /><em>contributed.</em></h2></div><div className="experience-list"><div className="experience-item"><div className="experience-date">MAR 2026<br />AUG 2026</div><div><div className="experience-title"><h3>Flutter Developer</h3><span>SM Technology / Betopia Groups · Dhaka</span></div><p>Developed production cross-platform applications using clean architecture, Riverpod, GetX, REST APIs, backend services, and real-time features for Android and iOS.</p><div className="chip-row"><span>Flutter</span><span>Clean architecture</span><span>Riverpod · GetX</span><span>Production apps</span></div></div></div><div className="experience-item"><div className="experience-date">FEB 2024<br />AUG 2024</div><div><div className="experience-title"><h3>Junior Software Developer</h3><span>QueryBD · Gazipur</span></div><p>Built scalable software and analytics systems for business clients, including real-time dashboards and API-driven inventory solutions.</p><div className="chip-row"><span>Product systems</span><span>Data dashboards</span><span>API integration</span></div></div></div></div></section>
 
         <section id="projects" className="section-wrap content-section projects-section"><div className="section-heading inline-heading"><div><span>03 / Selected work</span><h2>Things I've<br /><em>made.</em></h2></div><span className="project-count">{active.projects.length.toString().padStart(2, '0')} projects</span></div><div className="project-grid">{active.projects.map((project, index) => <article className="project-card" key={`${mode}-${project.name}`}><div className="project-top"><span className="project-index">0{index + 1}</span><span className="project-icon">{project.icon}</span>{project.link && <a href={project.link} target="_blank" rel="noreferrer" aria-label={`Open ${project.name}`}><ExternalLink size={18} /></a>}</div><p className="project-type">{project.type}</p><h3>{project.name}</h3><p>{project.description}</p><div className="project-tech">{project.tech.split(' · ').map((tech) => <span key={tech}>{tech}</span>)}</div></article>)}</div></section>
 

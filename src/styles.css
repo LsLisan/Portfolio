@@ -46,6 +46,33 @@ h1, h2, h3, p { margin-top: 0; } h1, h2 { font-family: var(--serif); font-weight
 @media (max-width: 800px) { .education-list { grid-column: auto; } }
 @media (max-width: 520px) { .education-item { grid-template-columns: 1fr; gap: 7px; } }
 
+.site-shell { position: relative; overflow: hidden; }
+.site-shell > .dot-field { position: fixed; inset: 0; z-index: 10; width: 100vw; height: 100vh; pointer-events: none; opacity: .38; mix-blend-mode: screen; }
+.site-shell > *:not(.dot-field) { position: relative; z-index: 1; }
+.site-shell > .topbar { z-index: 30; }
+.hero-copy, .section-heading, .about-content, .experience-list, .project-grid, .skills-content, .achievement-row, .education-list, .research-stack, .contact-inner { position: relative; z-index: 2; }
+.hero-copy { padding: 12px 16px 14px 0; }
+.content-section { background: color-mix(in srgb, var(--paper) 94%, transparent); }
+.mode-band, .contact-section { position: relative; z-index: 2; }
+.topbar { z-index: 30; }
+.nav-links.open { z-index: 40; }
+@media (max-width: 800px) {
+	.topbar { isolation: isolate; }
+	.nav-links { top: 70px; left: 0; right: 0; width: 100%; max-height: calc(100vh - 88px); overflow-y: auto; border: 1px solid var(--line); background: rgba(255, 255, 255, .9); box-shadow: 0 18px 45px rgba(0, 0, 0, .18); backdrop-filter: blur(24px); }
+	:root[data-theme='dark'] .nav-links { background: rgba(29, 29, 31, .92); }
+	.nav-links button { min-height: 46px; }
+}
+
+.hero-visual { overflow: hidden; border-radius: 36px; }
+.dot-field { z-index: 0; }
+.portrait-frame, .orbit { z-index: 1; }
+.resume-menu { position: relative; }
+.resume-options { position: absolute; top: calc(100% + 10px); right: 0; z-index: 20; width: 205px; padding: 7px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255, 255, 255, .84); box-shadow: 0 16px 40px rgba(0, 0, 0, .16); backdrop-filter: blur(20px); }
+:root[data-theme='dark'] .resume-options { background: rgba(29, 29, 31, .9); }
+.resume-options a { display: flex; align-items: center; gap: 9px; padding: 10px; border-radius: 10px; font-size: .76rem; }
+.resume-options a:hover { background: var(--wash); }
+.resume-options a svg:last-child { margin-left: auto; color: var(--accent); }
+
 /* Apple-inspired product surface refinements */
 :root { --paper: #f5f5f7; --ink: #1d1d1f; --muted: #6e6e73; --line: rgba(0, 0, 0, .10); --accent: #0071e3; --accent-dark: #0077ed; --wash: #e8e8ed; --card: rgba(255, 255, 255, .78); --serif: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif; --sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif; --mono: 'SF Mono', ui-monospace, monospace; }
 :root[data-theme='dark'] { --paper: #000; --ink: #f5f5f7; --muted: #a1a1a6; --line: rgba(255, 255, 255, .13); --accent: #2997ff; --accent-dark: #4aa8ff; --wash: #1d1d1f; --card: rgba(29, 29, 31, .82); }
