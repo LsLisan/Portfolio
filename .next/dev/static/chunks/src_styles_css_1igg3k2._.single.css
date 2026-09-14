@@ -665,17 +665,33 @@ blockquote {
 }
 
 @media (max-width: 800px) {
+  .topbar {
+    z-index: 200;
+    isolation: isolate;
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    background: #f5f5f7e0;
+    position: sticky;
+    top: 0;
+    overflow: visible;
+  }
+
   .nav-links {
-    background: var(--paper);
     border: 1px solid var(--line);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+    z-index: 2147483647;
+    background: #fffffff5;
+    border-radius: 18px;
     flex-direction: column;
     gap: 0;
-    padding: 8px 0;
+    width: min(88vw, 260px);
+    padding: 8px;
     display: none;
-    position: absolute;
-    top: 70px;
-    left: 0;
-    right: 0;
+    position: fixed;
+    top: 78px;
+    right: max(16px, 50vw + min(100% - 32px, 1180px) / -2);
+    box-shadow: 0 24px 50px #0000002e;
   }
 
   .nav-links.open {
@@ -684,7 +700,13 @@ blockquote {
 
   .nav-links button {
     text-align: left;
-    padding: 13px 18px;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-weight: 600;
+  }
+
+  .nav-links button:hover {
+    background: var(--wash);
   }
 
   .nav-resume {
@@ -696,9 +718,11 @@ blockquote {
   }
 
   .hero {
+    z-index: 1;
     grid-template-columns: 1fr;
     gap: 30px;
     padding-top: 65px;
+    position: relative;
   }
 
   .hero-visual {
@@ -736,6 +760,19 @@ blockquote {
     grid-template-columns: 1fr;
     gap: 45px;
     padding: 80px 0;
+  }
+
+  .hero, .content-section, .contact-section, main {
+    z-index: 1;
+    position: relative;
+  }
+
+  :root[data-theme="dark"] .topbar {
+    background: #0d0d10e6;
+  }
+
+  :root[data-theme="dark"] .nav-links {
+    background: #1d1d1ff7;
   }
 }
 
@@ -820,6 +857,12 @@ blockquote {
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+
+:root[data-theme="light"] .three-scene {
+  opacity: .62;
+  filter: saturate(1.45) contrast(1.12);
+  mix-blend-mode: normal;
 }
 
 .dot-field {
@@ -933,13 +976,35 @@ blockquote {
   z-index: 30;
 }
 
+.site-shell > .nav-links {
+  z-index: 31;
+  align-items: center;
+  height: 64px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .hero-copy, .section-heading, .about-content, .experience-list, .project-grid, .skills-content, .achievement-row, .education-list, .research-stack, .contact-inner {
   z-index: 2;
   position: relative;
 }
 
+.topbar {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+}
+
 .hero-copy {
   padding: 12px 16px 14px 0;
+}
+
+main {
+  z-index: 1;
+  position: relative;
 }
 
 .content-section {
@@ -960,20 +1025,12 @@ blockquote {
 }
 
 @media (max-width: 800px) {
-  .topbar {
-    isolation: isolate;
-  }
-
   .nav-links {
     border: 1px solid var(--line);
     -webkit-backdrop-filter: blur(24px);
     backdrop-filter: blur(24px);
     background: #ffffffe6;
-    width: 100%;
     max-height: calc(100vh - 88px);
-    top: 70px;
-    left: 0;
-    right: 0;
     overflow-y: auto;
     box-shadow: 0 18px 45px #0000002e;
   }
@@ -984,6 +1041,10 @@ blockquote {
 
   .nav-links button {
     min-height: 46px;
+  }
+
+  .nav-links.open {
+    z-index: 70;
   }
 }
 
@@ -1480,12 +1541,27 @@ blockquote {
     padding-top: 75px;
   }
 
+  .site-shell > .nav-links {
+    z-index: 2147483647;
+    align-items: stretch;
+    width: min(88vw, 260px);
+    height: auto;
+    position: fixed;
+    top: 64px;
+    left: auto;
+    right: 20px;
+    transform: none;
+  }
+
+  .site-shell > .nav-links.open {
+    display: flex;
+  }
+
   .nav-links {
     -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-radius: 18px;
     padding: 8px;
-    top: 60px;
     box-shadow: 0 15px 40px #00000026;
   }
 
@@ -1517,6 +1593,31 @@ blockquote {
 
   .project-card, .skill-feature, .research-card, .research-note {
     border-radius: 20px;
+  }
+}
+
+.site-shell > :not(.dot-field):not(.three-scene).nav-links {
+  z-index: 31;
+  align-items: center;
+  height: 64px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+}
+
+@media (max-width: 800px) {
+  .site-shell > :not(.dot-field):not(.three-scene).nav-links {
+    z-index: 2147483647;
+    align-items: stretch;
+    width: min(88vw, 260px);
+    height: auto;
+    position: fixed;
+    top: 64px;
+    left: auto;
+    right: 20px;
+    transform: none;
   }
 }
 

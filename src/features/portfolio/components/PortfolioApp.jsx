@@ -41,11 +41,6 @@ export default function PortfolioApp() {
       <ThreeScene />
       <header className="topbar">
         <button className="wordmark" onClick={() => switchSection('top')} aria-label="Back to top">LI<span>.</span></button>
-        <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Primary navigation">
-          {navItems.map((item) => (
-            <button key={item} onClick={() => switchSection(item)}>{item}</button>
-          ))}
-        </nav>
         <div className="top-actions">
           <button className="icon-button" onClick={() => setDark(!dark)} aria-label="Toggle color theme">
             {dark ? <Sun size={18} /> : <Moon size={18} />}
@@ -70,6 +65,12 @@ export default function PortfolioApp() {
           </button>
         </div>
       </header>
+
+      <nav className={menuOpen ? 'nav-links open' : 'nav-links'} aria-label="Primary navigation">
+        {navItems.map((item) => (
+          <button key={item} onClick={() => switchSection(item)}>{item}</button>
+        ))}
+      </nav>
 
       <main id="top">
         <section className="hero section-wrap">

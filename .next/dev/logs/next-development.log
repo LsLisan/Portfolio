@@ -4,3 +4,30 @@
 {"timestamp":"00:01:32.758","source":"Server","level":"LOG","message":"✓ Compiled in 355ms"}
 {"timestamp":"00:01:33.921","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
 {"timestamp":"00:01:33.975","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
+{"timestamp":"00:07:16.331","source":"Server","level":"LOG","message":"✓ Compiled in 76ms"}
+{"timestamp":"00:08:54.322","source":"Server","level":"LOG","message":"✓ Compiled in 16ms"}
+{"timestamp":"00:09:02.326","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:09:02.593","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:09:02.600","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
+{"timestamp":"00:09:06.824","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:09:07.072","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:09:07.073","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
+{"timestamp":"00:11:02.831","source":"Server","level":"LOG","message":"✓ Compiled in 17ms"}
+{"timestamp":"00:11:21.565","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:11:21.789","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:11:21.790","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
+{"timestamp":"00:13:11.020","source":"Server","level":"LOG","message":"✓ Compiled in 8ms"}
+{"timestamp":"00:13:22.001","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:13:22.279","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:13:22.279","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
+{"timestamp":"00:15:01.421","source":"Server","level":"LOG","message":"✓ Compiled in 25ms"}
+{"timestamp":"00:15:02.002","source":"Browser","level":"LOG","message":"THREE.WebGLRenderer: Context Lost."}
+{"timestamp":"00:15:06.532","source":"Server","level":"LOG","message":"✓ Compiled in 7ms"}
+{"timestamp":"00:15:15.784","source":"Server","level":"LOG","message":"✓ Compiled in 12ms"}
+{"timestamp":"00:15:55.931","source":"Server","level":"LOG","message":"✓ Compiled in 5ms"}
+{"timestamp":"00:16:25.789","source":"Server","level":"LOG","message":"✓ Compiled in 6ms"}
+{"timestamp":"00:17:03.624","source":"Server","level":"LOG","message":"✓ Compiled in 6ms"}
+{"timestamp":"00:18:20.645","source":"Server","level":"LOG","message":"✓ Compiled in 6ms"}
+{"timestamp":"00:18:31.579","source":"Browser","level":"INFO","message":"Download the React DevTools for a better development experience: https://react.dev/link/react-devtools"}
+{"timestamp":"00:18:31.863","source":"Browser","level":"WARN","message":"THREE.Clock: This module has been deprecated. Please use THREE.Timer instead."}
+{"timestamp":"00:18:31.863","source":"Server","level":"WARN","message":"[browser] \"\\u001b[33mTHREE.Clock: This module has been deprecated. Please use THREE.Timer instead.\\u001b[39m\""}
