@@ -3,8 +3,42 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 
-function OrbitingCore() {
+const liquidVertexShader = `
+  uniform float uTime;
+  uniform float uScroll;
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+
+  void main() {
+    vec3 displaced = position;
+    float wave = sin(position.y * 3.4 + uTime * 1.4) * 0.075;
+    wave += sin(position.x * 4.2 - uTime * 1.1) * 0.045;
+    wave += cos(position.z * 5.1 + uTime * 0.9) * 0.035;
+    displaced += normal * (wave + uScroll * 0.035);
+    vNormal = normalize(normalMatrix * normal);
+    vPosition = displaced;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(displaced, 1.0);
+  }
+`;
+
+const liquidFragmentShader = `
+  uniform float uTime;
+  varying vec3 vNormal;
+  varying vec3 vPosition;
+
+  void main() {
+    vec3 cool = vec3(0.16, 0.53, 1.0);
+    vec3 light = vec3(0.86, 0.96, 1.0);
+    float rim = pow(1.0 - max(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0)), 0.0), 2.2);
+    float shimmer = 0.5 + 0.5 * sin(vPosition.y * 5.0 + uTime * 1.7);
+    vec3 color = mix(cool, light, rim * 0.8 + shimmer * 0.12);
+    gl_FragColor = vec4(color, 0.9);
+  }
+`;
+
+function LiquidGlassOrb() {
   const group = useRef(null);
+  const liquidMaterial = useRef(null);
   const pointerTarget = useRef({ x: 0, y: 0 });
   const scrollTarget = useRef(0);
 
@@ -44,25 +78,29 @@ function OrbitingCore() {
     group.current.scale.x += (targetScale - group.current.scale.x) * 0.025;
     group.current.scale.y += (targetScale - group.current.scale.y) * 0.025;
     group.current.scale.z += (targetScale - group.current.scale.z) * 0.025;
+    if (liquidMaterial.current) {
+      liquidMaterial.current.uniforms.uTime.value = elapsed;
+      liquidMaterial.current.uniforms.uScroll.value = scroll;
+    }
   });
 
   return (
     <group ref={group}>
       <mesh>
-        <icosahedronGeometry args={[1.45, 2]} />
-        <meshStandardMaterial color="#8fc9ff" emissive="#1478d4" emissiveIntensity={0.55} roughness={0.2} metalness={0.7} wireframe />
+        <sphereGeometry args={[1.45, 96, 64]} />
+        <shaderMaterial ref={liquidMaterial} vertexShader={liquidVertexShader} fragmentShader={liquidFragmentShader} uniforms={{ uTime: { value: 0 }, uScroll: { value: 0 } }} transparent opacity={0.92} />
       </mesh>
-      <mesh scale={0.72}>
-        <icosahedronGeometry args={[1.45, 2]} />
-        <meshPhysicalMaterial color="#f7fbff" emissive="#4ba6ff" emissiveIntensity={0.4} roughness={0.08} metalness={0.25} transmission={0.65} thickness={1.2} transparent opacity={0.82} />
+      <mesh scale={0.82}>
+        <sphereGeometry args={[1.45, 64, 48]} />
+        <meshPhysicalMaterial color="#bfe3ff" emissive="#2388e8" emissiveIntensity={0.45} roughness={0.08} metalness={0.08} transmission={0.82} thickness={1.6} transparent opacity={0.35} />
       </mesh>
-      <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[2.05, 0.012, 12, 96]} />
-        <meshBasicMaterial color="#65b7ff" transparent opacity={0.6} />
+      <mesh scale={1.04}>
+        <sphereGeometry args={[1.45, 64, 48]} />
+        <meshPhysicalMaterial color="#75bdff" roughness={0.04} metalness={0.15} transmission={0.92} thickness={0.4} transparent opacity={0.18} />
       </mesh>
-      <mesh rotation={[0.7, 0.3, 0.4]}>
-        <torusGeometry args={[1.8, 0.008, 12, 96]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.45} />
+      <mesh position={[-0.42, 0.58, 1.15]} scale={0.2}>
+        <sphereGeometry args={[1, 32, 24]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.75} />
       </mesh>
     </group>
   );
@@ -75,7 +113,7 @@ export default function ThreeScene() {
         <ambientLight intensity={0.8} />
         <pointLight position={[3, 3, 4]} intensity={12} color="#b9ddff" />
         <pointLight position={[-4, -2, 2]} intensity={8} color="#176bff" />
-        <OrbitingCore />
+        <LiquidGlassOrb />
       </Canvas>
     </div>
   );
